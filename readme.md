@@ -18,7 +18,82 @@ The library can load Slang shaders as well, and you'll get binding information
 alongside the corresponding shader program; I use the Slang reflection system
 to find the name of bindings, slot numbers, and types.
 
-# Notes
+## API Reference
+
+### Context
+- `create_context`
+- `destroy_context`
+- `get_capabilities`
+- `get_storage_alignment`
+- `get_constant_alignment`
+
+### Swapchain
+- `get_swapchain_texture`
+- `get_swapchain_pixel_format`
+- `get_swapchain_interval`
+- `set_swapchain_interval`
+
+### Frame
+- `begin_frame`
+- `present`
+- `get_backbuffer_index`
+- `get_last_frame_gpu_time`
+
+### Command buffer
+- `create_command_buffer`
+- `submit_command_buffer`
+- `begin_debug_group`
+- `end_debug_group`
+
+### Textures
+- `create_texture`
+- `create_texture_view`
+- `destroy_texture`
+- `replace_texture_region`
+- `create_texture_2d_rgba8`
+- `is_null`
+- `get_desc`
+
+### Samplers
+- `create_sampler_state`
+- `destroy_sampler_state`
+
+### Buffers
+- `create_buffer`
+- `destroy_buffer`
+- `lock_buffer`
+- `unlock_buffer`
+
+### Readback buffer
+- `create_readbackbuffer`
+- `destroy_readbackbuffer`
+- `lock_readbackbuffer`
+- `unlock_readbackbuffer`
+
+### Copy pass
+- `begin_copy_pass`
+- `end_copy_pass`
+- `copy_texture`
+- `generate_mipmaps`
+- `copy_texture_to_readbackbuffer`
+
+### Render pass
+- `begin_render_pass`
+- `end_render_pass`
+- `set_buffer`
+- `set_viewport`
+- `set_viewports`
+- `set_vertex_buffer`
+- `set_texture`
+- `set_sampler_state`
+- `draw`
+- `draw_indexed`
+
+### Shaders
+- `compile_shader`
+- `destroy_shader`
+
+## Notes
 
 Right now, your project has to link dynamically with slang-compiler.dll or
 libslang.dylib (on macOS). Make sure those sit next to your executable.
