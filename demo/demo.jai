@@ -13,12 +13,6 @@ Vertex :: struct {
     position : Vector2;
 };
 
-theta := 0.;
-
-
-last_time : float;
-dt        : float;
-
 main :: () {
     window_flags := SDL_WindowFlags.SDL_WINDOW_RESIZABLE;
 
@@ -72,11 +66,6 @@ main :: () {
     ortho_buffer = create_buffer("Ortho Matrix", size_of(Matrix4), size_of(Matrix4), null, .CPU_WRITE, .CONSTANT_BUFFER);
 
     while !quit {
-
-        now := cast(float) seconds_since_init();
-        dt        = now - last_time;
-        last_time = now;
-
         reset_temporary_storage();
 
         begin_frame();
@@ -107,16 +96,15 @@ main :: () {
                 .{ (window_width / 2 - window_width / 4), window_height * 0.8 }
             ];
 
-            theta += dt;
-
+            angle := cast(float) seconds_since_init() * 0.5;
             pivot := Vector2.{ window_width / 2, window_height / 2 };
 
             for * vertices {
                 x := it.x - pivot.x;
                 y := it.y - pivot.y;
 
-                new_x := x * cos(theta) - y * sin(theta);
-                new_y := x * sin(theta) + y * cos(theta);
+                new_x := x * cos(angle) - y * sin(angle);
+                new_y := x * sin(angle) + y * cos(angle);
 
                 it.x = new_x + pivot.x;
                 it.y = new_y + pivot.y;
