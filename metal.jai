@@ -292,6 +292,7 @@ GFX_Command_Buffer :: struct {
 }
 
 create_command_buffer :: (name: string) -> GFX_Command_Buffer {
+    auto_release_temp();
     using context.graphics_context;
 
     buffer := cmd_queue.commandBuffer(cmd_queue);
@@ -356,6 +357,7 @@ is_null :: (buffer: *GFX_Buffer) -> bool {
 }
 
 create_buffer :: (name: string, size: u64, stride: u32, data: *void, storage_flags: GFX_Storage_Flags, _: GFX_Bind_Flags) -> GFX_Buffer {
+    auto_release_temp();
     using context.graphics_context;
 
     options: MTLResourceOptions;
@@ -501,6 +503,7 @@ get_desc :: (texture: *GFX_Texture) -> GFX_Texture_Desc {
 }
 
 create_texture :: (name : string, desc : GFX_Texture_Desc, data : *void = null) -> GFX_Texture {
+    auto_release_temp();
     using context.graphics_context;
 
     // assert(desc.usage != .UNKNOWN, "desc.usage is %", desc.usage);
@@ -607,6 +610,7 @@ replace_texture_region :: (using texture : *GFX_Texture, origin : Vector3u, size
 }
 
 create_texture_view :: (name : string, texture : GFX_Texture, desc : GFX_Texture_View_Desc) -> GFX_Texture {
+    auto_release_temp();
     view := cast(*MTLTexture, MTLTexture.newTextureViewWithPixelFormat_textureType_levels_slices(
         texture.handle,
         make_metal_pixel_format(desc.pixel_format),
@@ -928,6 +932,8 @@ GFX_Render_Pass :: struct {
 
 
 begin_render_pass :: (pass : *GFX_Render_Pass, name : string, cmd_buffer : *GFX_Command_Buffer, desc : GFX_Render_Pass_Desc) {
+    auto_release_temp();
+
     pass.desc = desc;
 
     pass_desc := MTLRenderPassDescriptor.renderPassDescriptor();
@@ -1023,6 +1029,8 @@ set_viewport :: (using pass : *GFX_Render_Pass, viewport : GFX_Viewport) {
 }
 
 set_viewports :: (using pass : *GFX_Render_Pass, viewports : []GFX_Viewport) {
+    auto_release_temp();
+
     mtl_viewports := NewArray(viewports.count, MTLViewport ,, temp);
     for viewports {
         mtl_viewports[it_index] = .{
@@ -1214,6 +1222,8 @@ GFX_Copy_Pass :: struct {
 }
 
 begin_copy_pass :: (using pass : *GFX_Copy_Pass, name : string, cmd_buffer : *GFX_Command_Buffer) {
+    auto_release_temp();
+
     encoder = cmd_buffer.blitCommandEncoder(cmd_buffer.handle);
     begin_debug_group(cmd_buffer, tprint("Copy Pass '%'", name));
 }
@@ -1296,6 +1306,8 @@ make_metal_depth_stencil_state :: (using render_state: *Render_State) -> *MTLDep
 }
 
 make_metal_pso :: (using render_state: *Render_State) -> *MTLRenderPipelineState {
+    auto_release_temp();
+
     using context.graphics_context;
 
     error : *NSError;

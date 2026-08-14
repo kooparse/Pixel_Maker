@@ -33,7 +33,6 @@ main :: () {
     SDL_GL_GetDrawableSize(window, *dw, *dh);
 
     dpi_scale := xx (dw / window_width);
-    log("dpi_scale: %", dpi_scale);
 
     platform_window: *void;
 
@@ -66,8 +65,6 @@ main :: () {
     ortho_buffer = create_buffer("Ortho Matrix", size_of(Matrix4), size_of(Matrix4), null, .CPU_WRITE, .CONSTANT_BUFFER);
 
     while !quit {
-        reset_temporary_storage();
-
         begin_frame();
 
         event: SDL_Event;
@@ -153,7 +150,6 @@ main :: () {
             submit_command_buffer(*command_buffer);
             present();
         }
-
     }
 
     if quit {

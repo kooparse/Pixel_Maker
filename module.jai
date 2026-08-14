@@ -9,6 +9,7 @@
 #module_parameters(DEBUG_LAYER := false, MAX_FRAME_IN_FLIGHT := 3, DISPLAY_SYNC := true);
 
 gpu_frame_count : int;
+render_state    : Render_State;
 
 Render_State :: struct {
     name                : string; // Nice for debugging.
@@ -59,8 +60,6 @@ Render_State :: struct {
     // This is used by metal only, we "hash" the vertex layout at comptime.
     vertex_layout_hash  : u64;
 };
-
-render_state: Render_State;
 
 reset_render_state :: () {
     render_state = Render_State.{};
@@ -642,6 +641,10 @@ GFX_Pipeline_Binding :: struct {
     stage   : GFX_Pipeline_Stage;
     index   : s32 = -1;
 };
+
+get_bindings :: ($vertex_bindings: Type, $pixel_bindings: Type) -> vertex_bindings, pixel_bindings {
+    return get_binding(render_state.vertex_shader, vertex_bindings), get_binding(render_state.pixel_shader, pixel_bindings);
+}
 
 get_binding :: (shader: *GFX_Shader, $T: Type) -> T #modify {
     return (cast(*Type_Info) T).type == .STRUCT;

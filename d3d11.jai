@@ -258,6 +258,7 @@ submit_command_buffer :: (cmd_buffer : *GFX_Command_Buffer) {
 }
 
 begin_debug_group :: (cmd_buffer : *GFX_Command_Buffer, name : string) {
+    auto_release_temp();
     using context.graphics_context;
 
     wide_string := Utf8.utf8_to_wide(name ,, temp);
@@ -386,8 +387,8 @@ is_null :: (buffer : *GFX_Buffer) -> bool {
     return buffer == null || buffer.handle == null;
 }
 
-// gfx_create_buffer
 create_buffer :: (name : string, size : u64, stride: u32, data : *void, storage_flags : GFX_Storage_Flags, bind_flags: GFX_Bind_Flags) -> GFX_Buffer {
+    auto_release_temp();
     using context.graphics_context;
 
     hr  : HRESULT;
@@ -685,6 +686,7 @@ set_viewport :: (pass : *GFX_Render_Pass, viewport : GFX_Viewport) {
 }
 
 set_viewports :: (pass : *GFX_Render_Pass, viewports : []GFX_Viewport) {
+    auto_release_temp();
     using context.graphics_context;
 
     d3d_viewports := NewArray(viewports.count, D3D11_VIEWPORT ,, temp);
@@ -1098,6 +1100,7 @@ get_desc :: (texture: *GFX_Texture) -> GFX_Texture_Desc {
 }
 
 create_texture :: (name : string, desc : GFX_Texture_Desc, data : *void = null) -> GFX_Texture {
+    auto_release_temp();
     using context.graphics_context;
 
     // assert(desc.usage != .UNKNOWN, "desc.usage is %", desc.usage);
@@ -1286,6 +1289,7 @@ replace_texture_region :: (using texture : *GFX_Texture, origin : Vector3u, size
 }
 
 create_texture_view :: (name : string, texture : GFX_Texture, desc : GFX_Texture_View_Desc) -> GFX_Texture {
+    auto_release_temp();
     using context.graphics_context;
 
     srv_desc: D3D11_SHADER_RESOURCE_VIEW_DESC;
@@ -1361,6 +1365,7 @@ is_null :: (sampler : *GFX_Sampler_State) -> bool {
 }
 
 create_sampler_state :: (name : string, desc : GFX_Sampler_State_Desc) -> GFX_Sampler_State {
+    auto_release_temp();
     using context.graphics_context;
 
     d3d_desc : D3D11_SAMPLER_DESC;
@@ -1519,6 +1524,7 @@ to_d3d_sampler_filter :: (desc: GFX_Sampler_State_Desc) -> D3D11_FILTER {
 }
 
 to_d3d_input_layout :: (vertex_layout: [] GFX_Vertex_Input_Desc, vertex_bytecode: string) -> *ID3D11InputLayout {
+    auto_release_temp();
     using context.graphics_context;
 
     layout          : *ID3D11InputLayout;
